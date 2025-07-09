@@ -118,7 +118,7 @@ my-app/
 
 ---
 
-## 🫱🏻‍🫲🏻  Contributor:
+## 🫱🏻‍🫲🏻 Contributor:
 
 [![avatar](https://github.com/iamvkr.png?size=40)](https://github.com/iamvkr)
 

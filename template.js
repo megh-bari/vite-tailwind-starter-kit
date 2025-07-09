@@ -10,7 +10,130 @@ export default defineConfig({
 `;
 export const index_css_template = `@import "tailwindcss";`;
 
-export const app_component_template = (isRouter, isIcon) => {
+export const app_component_template = (isRouter, isIcon, isTs) => {
+  // Base imports
+  let imports = ["import React from 'react';"];
+
+  // Add router imports if needed
+  if (isRouter) {
+    imports.push(
+      "import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';"
+    );
+  }
+
+  // Add icon imports if needed
+  if (isIcon) {
+    imports.push("import { Home, Info, Rocket } from 'lucide-react';");
+  }
+
+  const importsString = imports.length > 0 ? imports.join('\n') + '\n\n' : '';
+
+  // TypeScript or JavaScript function declaration
+  const functionDeclaration = isTs ? 'const App: React.FC = () => {' : 'const App = () => {';
+
+  // Generate component content based on combinations
+  let componentContent = '';
+
+  if (isRouter && isIcon) {
+    // Router + Icon combination
+    componentContent = `  return (
+      <Router>
+        <div className="min-h-screen bg-gray-100 p-8">
+          <nav className="mb-8">
+            <div className="flex space-x-4">
+              <Link to="/" className="flex items-center space-x-2 text-blue-600 hover:text-blue-800">
+                <Home size={20} />
+                <span>Home</span>
+              </Link>
+              <Link to="/about" className="flex items-center space-x-2 text-blue-600 hover:text-blue-800">
+                <Info size={20} />
+                <span>About</span>
+              </Link>
+            </div>
+          </nav>
+          
+          <Routes>
+            <Route path="/" element={
+              <div className="flex items-center space-x-2 text-2xl font-bold">
+                <Rocket className="text-orange-500" />
+                <span>🚀 Welcome to Vite + Tailwind + Router + Icons!</span>
+              </div>
+            } />
+            <Route path="/about" element={
+              <div className="flex items-center space-x-2 text-xl">
+                <Info className="text-blue-500" />
+                <span>About Page</span>
+              </div>
+            } />
+          </Routes>
+        </div>
+      </Router>
+    );`;
+  } else if (isRouter && !isIcon) {
+    // Router only
+    componentContent = `  return (
+      <Router>
+        <div className="min-h-screen bg-gray-100 p-8">
+          <nav className="mb-8">
+            <div className="flex space-x-4">
+              <Link to="/" className="text-blue-600 hover:text-blue-800">
+                Home
+              </Link>
+              <Link to="/about" className="text-blue-600 hover:text-blue-800">
+                About
+              </Link>
+            </div>
+          </nav>
+          
+          <Routes>
+            <Route path="/" element={
+              <div className="text-2xl font-bold">
+                🚀 Welcome to Vite + Tailwind + Router!
+              </div>
+            } />
+            <Route path="/about" element={
+              <div className="text-xl">
+                About Page
+              </div>
+            } />
+          </Routes>
+        </div>
+      </Router>
+    );`;
+  } else if (!isRouter && isIcon) {
+    // Icon only
+    componentContent = `  return (
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="flex items-center space-x-2 text-2xl font-bold">
+          <Rocket className="text-orange-500" />
+          <span>🚀 Welcome to Vite + Tailwind + Icons!</span>
+        </div>
+        <div className="mt-4 flex items-center space-x-4">
+          <Home className="text-blue-500" size={24} />
+          <Info className="text-green-500" size={24} />
+        </div>
+      </div>
+    );`;
+  } else {
+    // Default: No router, no icons
+    componentContent = `  return (
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="text-2xl font-bold">
+          🚀 Welcome to Vite + Tailwind!
+        </div>
+      </div>
+    );`;
+  }
+
+  return `${importsString}
+    ${functionDeclaration}
+  ${componentContent}
+  };
+  
+  export default App;`;
+};
+
+export const app_component_template_previous_version = (isRouter, isIcon, isTs) => {
   if (!isRouter && !isIcon) {
     return `const App = ()=> {
     return (
